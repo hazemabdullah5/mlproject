@@ -3,26 +3,19 @@ from typing import List
 from pathlib import Path
 
 
-HYPEN_E_DOT = "-e ."
+HYPEN_E_DOT="-e ."
 
-
-def get_requirements(file_path: str) -> List[str]:
+def get_requirements(file_path:str)->List[str]:
     '''
-    Return the list of requirements from a file located next to this setup.py.
-    Uses a path relative to this file so metadata generation works when
-    pip runs setup.py from a temporary directory.
+    This function will return the list of requirements
     '''
-    requirements: List[str] = []
-    req_path = Path(__file__).parent / file_path
-    if not req_path.exists():
-        return requirements
+    requirements = []
+    with open(file_path) as file_obj:
+        requirements = file_obj.readlines()
+        requirements = [req.replace("\n","") for req in requirements]
 
-    with req_path.open() as file_obj:
-        requirements = [req.strip() for req in file_obj if req.strip()]
-
-    if HYPEN_E_DOT in requirements:
-        requirements.remove(HYPEN_E_DOT)
-
+        if HYPEN_E_DOT in requirements:
+            requirements.remove(HYPEN_E_DOT)
     return requirements
 
 
